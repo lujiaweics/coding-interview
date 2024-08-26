@@ -3,14 +3,14 @@
 
 class Solution {
  public:
-  int minNumberInRotateArray(std::vector<int>& nums) {
+  int minNumberInRotateArray(std::vector<int>& nums, size_t left, size_t right) {
     if (nums.size() == 0) {
       return -1;
     } else if (nums.size() == 1) {
       return nums.front();
     }
     const int endNum = nums.back();
-    int l = 0, r = nums.size() - 1;
+    int l = left, r = right;
     while (l <= r) {
       if (l == r) {
         return nums[l];
@@ -29,7 +29,9 @@ class Solution {
         } else if (nums[mid + 1] < nums[mid]) {
           return nums[mid + 1];
         } else {
-          r = mid;
+          // choose recursion or linear search
+          return std::min(minNumberInRotateArray(nums, 0, l),
+                          minNumberInRotateArray(nums, l + 1, r));
         }
       }
     }
@@ -39,8 +41,8 @@ class Solution {
 
 int main() {
   Solution s;
-  std::vector vec{3, 100, 200, 3};
-  std::cout << s.minNumberInRotateArray(vec) << std::endl;
+  std::vector vec{1, 1, 1, 1, 0, 1};
+  std::cout << s.minNumberInRotateArray(vec, 0, vec.size() - 1) << std::endl;
 
   return 0;
 }
